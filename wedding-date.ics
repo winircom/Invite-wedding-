@@ -1,0 +1,11 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//WeddingInvite//RU
+BEGIN:VEVENT
+DTSTART:20260605T132000Z
+DTEND:20260605T210000Z
+SUMMARY:Свадьба Андрея и Юли
+DESCRIPTION:Ждем вас на нашем празднике! Регистрация в 16:20 (Дом дружбы народов), банкет в 18:00 (Wolki & Lipki).
+LOCATION:ул. Орджоникидзе, 33, Ижевск
+END:VEVENT
+END:VCALENDAR
