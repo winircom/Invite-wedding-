@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приглашение на свадьбу</title>
+    
+    <!-- Предзагрузка локальных изображений для GitHub -->
+    <link rel="preload" as="image" href="./andrey.jpg">
+    <link rel="preload" as="image" href="./yulia.jpg">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #F9F5F0;
+            font-family: 'Montserrat', sans-serif;
+            color: #2B1B17;
+            margin: 0;
+            padding: 0;
+        }
+        .font-script { font-family: 'Marck Script', cursive; }
+        
+        .photo-stickers {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-top: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .sticker {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .sticker img {
+            width: auto;
+            display: block;
+            object-fit: contain;
+            filter: drop-shadow(0 0 1px #4A0E0E) drop-shadow(4px 4px 0px #fff) drop-shadow(0 10px 15px rgba(0,0,0,0.1));
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 0.5s ease-in;
+        }
+
+        .sticker img.loaded {
+            opacity: 1;
+        }
+
+        .sticker-boy { 
+            width: 170px;
+            transform: rotate(-8deg) translateX(15px); 
+            z-index: 5; 
+        }
+        .sticker-boy img { height: 230px; }
+        
+        .sticker-girl { 
+            width: 212.5px; 
+            transform: rotate(5deg) translateX(-15px); 
+            z-index: 10; 
+        }
+        .sticker-girl img { height: 287.5px; }
+
+        .speech-bubble {
+            position: absolute;
+            width: 200px;
+            height: 120px;
+            z-index: 50; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            perspective: 1000px;
+        }
+
+        .bubble-svg {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(4px 4px 0px rgba(0,0,0,0.05));
+        }
+
+        .bubble-girl {
+            top: -60px;
+            right: -40px;
+            transform-origin: bottom left;
+            animation: popup-3d-card 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation-delay: 1.2s;
+        }
+
+        .bubble-boy {
+            top: -60px;
+            left: -40px;
+            width: 140px;
+            height: 100px;
+            transform-origin: bottom right;
+            animation: popup-3d-card 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            animation-delay: 3s;
+        }
+
+        .bubble-boy .bubble-svg {
+            transform: scaleX(-1);
+        }
+
+        @keyframes popup-3d-card {
+            0% { opacity: 0; transform: scale(0) rotateX(-100deg) rotateY(-20deg) translateY(50px); }
+            60% { transform: scale(1.1) rotateX(15deg) rotateY(5deg) translateY(-5px); }
+            100% { opacity: 1; transform: scale(1) rotateX(0deg) rotateY(0deg) translateY(0); }
+        }
+
+        .wave-banner {
+            background-color: #8C7364;
+            color: white;
+            padding: 15px 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-top: -20px;
+            position: relative;
+            z-index: 5;
+            min-height: 40px;
+            mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5,73.84-4.36,147.54,16.88,218.2,52.43,56.28,28.27,117.83,43.48,180.3,37.38,64.33-6.27,124.73-34.42,187.3-43.25,64.21-9,128.43,6.18,188.3,42.53,59.87,36.35,119.74,53.25,181.3,37.38,61.56-15.87,121.5-49.8,181.3-37.38v-80Z' fill='black'/%3E%3C/svg%3E");
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5,73.84-4.36,147.54,16.88,218.2,52.43,56.28,28.27,117.83,43.48,180.3,37.38,64.33-6.27,124.73-34.42,187.3-43.25,64.21-9,128.43,6.18,188.3,42.53,59.87,36.35,119.74,53.25,181.3,37.38,61.56-15.87,121.5-49.8,181.3-37.38v-80Z' fill='black'/%3E%3C/svg%3E");
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            text-align: center;
+        }
+
+        .calendar-day-active {
+            background-color: #4A0E0E;
+            color: #F9F5F0;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .location-heart { transition: transform 0.3s ease; cursor: pointer; }
+        .location-heart:hover { transform: scale(1.05) !important; }
+
+        .wavy-border {
+            background: #F9F5F0;
+            position: relative;
+            padding: 40px 25px;
+            border: 15px solid #4A0E0E;
+            border-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath d='M40 0c11 0 20 9 20 20s-9 20-20 20-20-9-20-20S29 0 40 0z' fill='%234A0E0E'/%3E%3C/svg%3E") 33% round;
+            border-radius: 50px;
+        }
+
+        #animated-path {
+            stroke-linecap: round;
+        }
+
+        /* Кастомное модальное окно для сообщений */
+        #custom-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: rgba(43, 27, 23, 0.6);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 300px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border: 2px solid #4A0E0E;
+        }
+    </style>
+</head>
+<body class="max-w-md mx-auto shadow-2xl min-h-screen overflow-x-hidden">
+
+    <!-- Header Section -->
+    <section class="relative bg-[#F9F5F0] pt-6 pb-10 text-center overflow-hidden">
+        <div class="w-full px-4 mb-4">
+            <svg viewBox="0 0 400 80" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 45 Q 100 35, 200 45 T 400 45" stroke="#4A0E0E" stroke-width="1.5" />
+                <path d="M200 90 C 190 85, 175 60, 180 40 C 183 25, 196 28, 200 42 C 204 28, 218 25, 225 45 C 230 70, 215 88, 200 90 Z" 
+                      fill="#4A0E0E" 
+                      transform="translate(100 22.5) scale(0.5)" />
+            </svg>
+        </div>
+
+        <h1 class="font-script text-6xl text-[#4A0E0E] mb-2">Андрей</h1>
+        <div class="text-[#4A0E0E] text-3xl font-bold mb-2">+</div>
+        <h1 class="font-script text-6xl text-[#4A0E0E]">Юля</h1>
+
+        <!-- Блок с фото -->
+        <div class="photo-stickers">
+            <div class="sticker sticker-boy">
+                <div class="speech-bubble bubble-boy">
+                    <svg class="bubble-svg" viewBox="0 0 200 120" preserveAspectRatio="none">
+                        <path d="M40,30 C20,30 10,50 20,70 C10,90 30,110 50,105 L40,125 L75,108 C90,115 120,115 140,105 C165,110 185,95 180,75 C190,55 175,30 150,35 C145,15 115,10 95,20 C75,10 45,15 40,30 Z" 
+                              fill="white" stroke="#2B1B17" stroke-width="3" />
+                        <path d="M85,15 Q100,5 120,15" fill="none" stroke="#2B1B17" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <p class="font-script text-[#4A0E0E] text-2xl leading-tight relative z-10 px-4 pt-1 text-center">М?..</p>
+                </div>
+                <img src="./andrey.jpg" 
+                     alt="Андрей" 
+                     fetchpriority="high" 
+                     onload="this.classList.add('loaded')">
+            </div>
+            <div class="sticker sticker-girl">
+                <div class="speech-bubble bubble-girl">
+                    <svg class="bubble-svg" viewBox="0 0 200 120" preserveAspectRatio="none">
+                        <path d="M40,30 C20,30 10,50 20,70 C10,90 30,110 50,105 L40,125 L75,108 C90,115 120,115 140,105 C165,110 185,95 180,75 C190,55 175,30 150,35 C145,15 115,10 95,20 C75,10 45,15 40,30 Z" 
+                              fill="white" stroke="#2B1B17" stroke-width="3" />
+                        <path d="M85,15 Q100,5 120,15" fill="none" stroke="#2B1B17" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <p class="font-script text-[#4A0E0E] text-sm leading-tight relative z-10 px-6 pt-1 text-center">
+                        Алё! Андрей? Мы женимся в 26-ом году!
+                    </p>
+                </div>
+                <img src="./yulia.jpg" 
+                     alt="Юля" 
+                     fetchpriority="high" 
+                     onload="this.classList.add('loaded')">
+            </div>
+        </div>
+
+        <div class="wave-banner">
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        </div>
+    </section>
+
+    <!-- Calendar Section -->
+    <section class="py-12 px-10 text-center bg-white">
+        <p class="font-script text-2xl mb-6 leading-relaxed text-[#4A0E0E]">
+            Дорогие друзья,<br>
+            мы приглашаем вас разделить<br>
+            с нами наше свадебное торжество,<br>
+            которое состоится
+        </p>
+        <h2 class="text-4xl font-script text-[#4A0E0E] mb-8">05.06.2026</h2>
+
+        <div class="bg-white border shadow-sm p-6 rounded-lg relative">
+            <p class="uppercase text-xs tracking-[0.2em] mb-4 text-[#4A0E0E]">Июнь 2026</p>
+            <div class="calendar-grid text-[10px] font-bold text-gray-400">
+                <span>ПН</span><span>ВТ</span><span>СР</span><span>ЧТ</span><span>ПТ</span><span>СБ</span><span>ВС</span>
+                <span>1</span><span>2</span><span>3</span><span>4</span>
+                <span class="calendar-day-active font-bold">5</span>
+                <span>6</span><span>7</span>
+                <span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span>
+                <span>15</span><span>16</span><span>17</span><span>18</span><span>19</span><span>20</span><span>21</span>
+                <span>22</span><span>23</span><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span>
+                <span>29</span><span>30</span>
+            </div>
+            <button onclick="addToCalendar()" class="mt-4 w-full flex justify-end items-center gap-1 group">
+                <span class="font-script text-xl text-[#4A0E0E] group-hover:underline">сохраните дату</span>
+                <svg class="w-4 h-4 text-[#4A0E0E] opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- Locations -->
+    <section id="location-section" class="py-16 px-4 bg-[#F9F5F0] overflow-hidden relative border-t border-[#4A0E0E]/10">
+        <svg class="absolute top-0 left-0 w-full h-[750px] pointer-events-none opacity-30" viewBox="0 0 400 750" fill="none" style="z-index: 10;" preserveAspectRatio="none">
+            <path id="animated-path" d="M0,0 C100,50 30,150 120,200 C210,250 140,450 250,500 C360,550 280,680 400,750" 
+                  stroke="#4A0E0E" stroke-width="2.5" />
+        </svg>
+
+        <h3 class="font-script text-4xl text-[#4A0E0E] text-center mb-10 relative z-20">Локация</h3>
+        
+        <div class="relative h-[550px] w-full max-w-[360px] mx-auto">
+            <div class="absolute top-0 left-0 w-80 h-80 transform -rotate-12 location-heart" style="z-index: 20;">
+                <svg class="absolute inset-0 w-full h-full text-[#4A0E0E]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <div class="relative z-10 h-full flex flex-col items-center justify-center text-white p-12 text-center">
+                    <p class="font-script text-xl mb-1">Регистрация</p>
+                    <a href="https://2gis.ru/izhevsk/geo/5770765303566624/53.243761,56.839890" target="_blank" class="block">
+                        <p class="text-[11px] font-semibold leading-tight">ул. Орджоникидзе, 33</p>
+                        <p class="text-[9px] italic opacity-80">Дом дружбы народов</p>
+                        <p class="text-[11px] font-bold mt-1 mb-3">в 16:20</p>
+                        <span class="text-[8px] border border-white/40 px-3 py-1 rounded-full uppercase tracking-widest bg-white/10">Карта</span>
+                    </a>
+                </div>
+            </div>
+            <div class="absolute bottom-0 right-0 w-80 h-80 transform rotate(12deg) location-heart" style="z-index: 30;">
+                <svg class="absolute inset-0 w-full h-full text-[#8C7364]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <div class="relative z-10 h-full flex flex-col items-center justify-center text-white p-12 text-center">
+                    <p class="font-script text-xl mb-1">Банкет</p>
+                    <a href="https://2gis.ru/izhevsk/geo/70000001032660986" target="_blank" class="block">
+                        <p class="text-[11px] font-semibold leading-tight">Якшур-Бодьинский тракт</p>
+                        <p class="text-[9px] mb-4 italic opacity-80">Wolki & Lipki</p>
+                        <p class="text-[11px] font-bold mt-1 mb-3">в 18:00</p>
+                        <span class="text-[8px] border border-white/40 px-3 py-1 rounded-full uppercase tracking-widest bg-white/10">Карта</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dress Code -->
+    <section class="py-16 px-8 bg-[#2B1B17] text-white text-center">
+        <h3 class="font-script text-4xl mb-6">Дресс-код</h3>
+        <div class="flex justify-center gap-6">
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-16 h-16 bg-[#2B1B17] rounded-full border border-white/20"></div>
+                <span class="text-[8px] uppercase tracking-widest">Chocolate</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-16 h-16 bg-[#4A0E0E] rounded-full border border-white/20"></div>
+                <span class="text-[8px] uppercase tracking-widest">Burgundy</span>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+                <div class="w-16 h-16 bg-[#8C7364] rounded-full border border-white/20"></div>
+                <span class="text-[8px] uppercase tracking-widest">Cocoa</span>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 px-6 text-center bg-white border-t border-[#4A0E0E]/10">
+        <h3 class="font-script text-4xl mb-10 text-[#4A0E0E]">Пожелания</h3>
+        <div class="mx-auto max-w-[320px] wavy-border shadow-lg">
+            <p class="font-script text-xl leading-relaxed text-[#4A0E0E]">
+                Не ломайте голову над подарками - ваши пожелания в конвертах станут отличным дополнением к нашему семейному бюджету
+            </p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 bg-[#F9F5F0] text-center border-t border-[#4A0E0E]/10">
+        <div class="w-full px-4 mb-6">
+            <svg viewBox="0 0 400 80" class="w-full h-auto" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 45 Q 100 35, 200 45 T 400 45" stroke="#4A0E0E" stroke-width="1.5" />
+                <path d="M200 90 C 190 85, 175 60, 180 40 C 183 25, 196 28, 200 42 C 204 28, 218 25, 225 45 C 230 70, 215 88, 200 90 Z" 
+                      fill="#4A0E0E" 
+                      transform="translate(100 22.5) scale(0.5)" />
+            </svg>
+        </div>
+        <p class="font-script text-3xl text-[#4A0E0E]">До встречи!</p>
+    </footer>
+
+    <!-- Модальное окно -->
+    <div id="custom-modal">
+        <div class="modal-content">
+            <p id="modal-text" class="text-burgundy font-medium mb-4"></p>
+            <button onclick="document.getElementById('custom-modal').style.display='none'" 
+                    class="bg-[#4A0E0E] text-white px-6 py-2 rounded-full text-sm">OK</button>
+        </div>
+    </div>
+
+    <script>
+        function showMessage(text) {
+            document.getElementById('modal-text').innerText = text;
+            document.getElementById('custom-modal').style.display = 'flex';
+        }
+
+        // Адаптированная функция для календаря под GitHub/Mobile
+        function addToCalendar() {
+            try {
+                const title = "Свадьба Андрея и Юли";
+                const description = "Ждем вас на нашем празднике! Регистрация в 16:20 (Дом дружбы народов), банкет в 18:00 (Wolki & Lipki).";
+                const location = "ул. Орджоникидзе, 33, Ижевск";
+                
+                // Время в формате UTC для совместимости (16:20 MSK = 13:20 UTC)
+                const startDate = "20260605T132000Z";
+                const endDate = "20260605T205900Z";
+
+                const icsMsg = [
+                    "BEGIN:VCALENDAR",
+                    "VERSION:2.0",
+                    "PRODID:-//WeddingInvite//RU",
+                    "BEGIN:VEVENT",
+                    "UID:" + new Date().getTime() + "@wedding.invite",
+                    "DTSTAMP:" + new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + "Z",
+                    "DTSTART:" + startDate,
+                    "DTEND:" + endDate,
+                    "SUMMARY:" + title,
+                    "DESCRIPTION:" + description,
+                    "LOCATION:" + location,
+                    "END:VEVENT",
+                    "END:VCALENDAR"
+                ].join("\r\n");
+
+                const blob = new Blob([icsMsg], { type: 'text/calendar;charset=utf-8' });
+                const url = window.URL.createObjectURL(blob);
+                
+                const link = document.createElement("a");
+                link.href = url;
+                link.setAttribute("download", "wedding.ics");
+                document.body.appendChild(link);
+                link.click();
+                
+                // Удаляем временные элементы
+                setTimeout(() => {
+                    document.body.removeChild(link);
+                    window.URL.revokeObjectURL(url);
+                }, 100);
+
+                showMessage("Файл календаря скачивается. Откройте его, чтобы добавить событие.");
+            } catch (e) {
+                showMessage("Не удалось создать файл. Пожалуйста, попробуйте еще раз.");
+            }
+        }
+
+        window.addEventListener('load', () => {
+            const path = document.getElementById('animated-path');
+            const section = document.getElementById('location-section');
+            
+            document.querySelectorAll('.sticker img').forEach(img => {
+                if (img.complete) {
+                    img.classList.add('loaded');
+                } else {
+                    img.addEventListener('load', () => img.classList.add('loaded'));
+                }
+            });
+
+            if (path && section) {
+                const pathLength = path.getTotalLength();
+                path.style.strokeDasharray = pathLength;
+                path.style.strokeDashoffset = pathLength;
+
+                function handleScroll() {
+                    const rect = section.getBoundingClientRect();
+                    const viewHeight = window.innerHeight;
+                    
+                    let progress = (viewHeight - rect.top) / (viewHeight + rect.height * 0.5);
+                    progress = Math.max(0, Math.min(1, progress));
+                    
+                    path.style.strokeDashoffset = pathLength * (1 - progress);
+                }
+
+                window.addEventListener('scroll', handleScroll, { passive: true });
+                handleScroll();
+            }
+        });
+    </script>
+</body>
+</html>
+
